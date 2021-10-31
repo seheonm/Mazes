@@ -58,36 +58,25 @@ public class Cell {
 
     public int getPicNumber(){
         if ((top != null || bottom != null) && left == null && right == null){
-//            if(top == null) return '╥';
-//            if (bottom == null) return '╨';
-//            return '║';
             return 5;
         }
         else if (top == null && bottom == null && (left != null || right != null)){
-//            if(left == null) return '╞';
-//            if(right == null) return '╡';
-//            return '═';
             return 6;
         }
         else if (top == null && bottom != null && left != null && right == null){
             return 2;
-//            return '╗';
         }
         else if (top != null && bottom == null && left != null && right == null){
             return 1;
-//            return '╝';
         }
         else if (top == null && bottom != null && left == null && right != null){
             return 3;
-//            return '╔';
         }
         else if (top != null && bottom == null && left == null && right != null){
             return 4;
-//            return '╚';
         }
         else if (top != null && bottom != null && left != null && right != null){
             return 7;
-//            return '╬';
         }
         else if (top != null && bottom != null){
             return (char)(left != null ? 11 : 9);
@@ -95,7 +84,6 @@ public class Cell {
         else if (left != null && right != null){
             return (char)(top != null ? 8 : 10);
         }
-        // all null
         return 'x';
     }
 

@@ -22,18 +22,6 @@ public class Maze {
             }
         }
     }
-//
-//    public Cell[][] generateWithDepthFirst(){
-//        new DepthFirstGenerator(maze, size).generate();
-//        setRandomOpenings();
-//        return maze;
-//    }
-//
-//    public Cell[][] generateWithKruskal(){
-//        new KruskalGenerator(maze, size).generate();
-//        setRandomOpenings();
-//        return maze;
-//    }
 
     public Cell[][] generate(){
         mazeGenerator.initGenerator(maze, size);
