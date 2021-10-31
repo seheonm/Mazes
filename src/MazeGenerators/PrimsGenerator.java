@@ -10,8 +10,8 @@ import java.util.Random;
 public class PrimsGenerator extends MazeGenerator{
     private List<Wall> walls;
 
-    public PrimsGenerator(Cell[][] board, int size) {
-        super(board, size);
+    @Override
+    protected void init(){
         walls = new LinkedList<>();
     }
 

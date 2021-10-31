@@ -7,8 +7,8 @@ import java.util.*;
 public class DepthFirstGenerator extends MazeGenerator{
     private Stack<Cell> cellStack;
 
-    public DepthFirstGenerator(Cell[][] board, int size){
-        super(board, size);
+    @Override
+    protected void init(){
         cellStack = new Stack<>();
     }
 
@@ -30,7 +30,6 @@ public class DepthFirstGenerator extends MazeGenerator{
                 int newRow = current.row + offset.upDown;
                 int newCol = current.col + offset.leftRight;
 
-                // this is ugly and you should make it better :)
                 if(checkIsValid(newRow, newCol)){
                     Cell newCell = board[newRow][newCol];
                     cellStack.push(current);

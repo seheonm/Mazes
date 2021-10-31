@@ -9,8 +9,6 @@ public class Cell {
     private Cell right;
     private boolean visited;
 
-    public Cell(){}
-
     public Cell(int row, int col){
         this.row = row;
         this.col = col;
@@ -56,6 +54,37 @@ public class Cell {
 
     public Cell getRight() {
         return right;
+    }
+
+    public int getPicNumber(){
+        if ((top != null || bottom != null) && left == null && right == null){
+            return 5;
+        }
+        else if (top == null && bottom == null && (left != null || right != null)){
+            return 6;
+        }
+        else if (top == null && bottom != null && left != null && right == null){
+            return 2;
+        }
+        else if (top != null && bottom == null && left != null && right == null){
+            return 1;
+        }
+        else if (top == null && bottom != null && left == null && right != null){
+            return 3;
+        }
+        else if (top != null && bottom == null && left == null && right != null){
+            return 4;
+        }
+        else if (top != null && bottom != null && left != null && right != null){
+            return 7;
+        }
+        else if (top != null && bottom != null){
+            return (char)(left != null ? 11 : 9);
+        }
+        else if (left != null && right != null){
+            return (char)(top != null ? 8 : 10);
+        }
+        return 'x';
     }
 
     public char getChar(){
