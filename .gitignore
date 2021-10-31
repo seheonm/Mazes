@@ -1,3 +1,4 @@
 out/
 .idea/
 TestMaze.iml
+.DS_Store

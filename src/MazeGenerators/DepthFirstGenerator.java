@@ -7,8 +7,12 @@ import java.util.*;
 public class DepthFirstGenerator extends MazeGenerator{
     private Stack<Cell> cellStack;
 
-    public DepthFirstGenerator(Cell[][] board, int size){
-        super(board, size);
+//    public DepthFirstGenerator(Cell[][] board, int size){
+//        super(board, size);
+//        cellStack = new Stack<>();
+//    }
+    @Override
+    protected void init(){
         cellStack = new Stack<>();
     }
 
