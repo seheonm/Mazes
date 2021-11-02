@@ -8,6 +8,7 @@ public class Cell {
     private Cell left;
     private Cell right;
     private boolean visited;
+    private boolean solutionPath;
 
     public Cell(int row, int col){
         this.row = row;
@@ -54,6 +55,14 @@ public class Cell {
 
     public Cell getRight() {
         return right;
+    }
+
+    public void setSolutionPath(boolean solutionPath) {
+        this.solutionPath = solutionPath;
+    }
+
+    public boolean isSolutionPath() {
+        return solutionPath;
     }
 
     public int getPicNumber(){

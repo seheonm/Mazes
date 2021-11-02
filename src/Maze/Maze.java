@@ -1,8 +1,10 @@
 package Maze;
 
 import MazeGenerators.*;
+import MazeSolvers.MazeSolver;
 
 import java.util.Random;
+import java.util.function.Function;
 
 public class Maze {
     private Cell[][] maze;
@@ -10,11 +12,13 @@ public class Maze {
     private Cell topOpening;
     private Cell bottomOpening;
     private MazeGenerator mazeGenerator;
+    private MazeSolver solver;
 
-    public Maze(int size, MazeGenerator mazeGenerator) {
+    public Maze(int size, MazeGenerator mazeGenerator, MazeSolver solver) {
         this.maze = new Cell[size][size];
         this.size = size;
         this.mazeGenerator = mazeGenerator;
+        this.solver = solver;
 
         for (int i = 0 ; i < size; i++){
             for(int j = 0; j < size; j++){
@@ -31,6 +35,10 @@ public class Maze {
         return maze;
     }
 
+    public void solve(Runnable reRender){
+        solver.solve(bottomOpening, topOpening, reRender, () -> clearAllButSolved());
+    }
+
     public void printMaze(){
         for (Cell[] row : this.maze){
             for(Cell c : row) {
@@ -43,6 +51,16 @@ public class Maze {
 
     public Cell[][] getMaze() {
         return maze;
+    }
+
+    private void clearAllButSolved(){
+        for (Cell[] row : this.maze){
+            for(Cell c : row) {
+                if(!c.isSolutionPath()){
+                    c.setVisited(false);
+                }
+            }
+        }
     }
 
     private void setRandomOpenings(){
@@ -75,10 +93,4 @@ public class Maze {
         return bottomOpening;
     }
 
-    public static void main(String[] args){
-        Maze m = new Maze(10, new PrimsGenerator());
-        m.generate();
-        m.printMaze();
-        System.out.println();
-    }
 }
