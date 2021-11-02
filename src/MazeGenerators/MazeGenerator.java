@@ -14,7 +14,13 @@ public abstract class MazeGenerator {
         init();
     }
 
+    /**
+     * Initializes the maze
+     */
     protected abstract void init();
 
+    /**
+     * Generates the maze
+     */
     public abstract void generate();
 }

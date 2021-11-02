@@ -16,6 +16,11 @@ public class BasicSolver extends BaseSolver{
         });
     }
 
+    /**
+     * This function solves the maze using recursion
+     * @param c of type Cell for which cell
+     * @return boolean if there is a good path
+     */
     private boolean solveRecursive(Cell c){
         if(c.isVisited()) return false;
 

@@ -13,6 +13,7 @@ public class KruskalGenerator extends MazeGenerator {
         cellSets = new LinkedList<>();
         walls = new LinkedList<>();
 
+
         // list of all wall indexes
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize ; j ++){

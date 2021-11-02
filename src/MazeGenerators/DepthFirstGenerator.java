@@ -57,6 +57,12 @@ public class DepthFirstGenerator extends MazeGenerator{
         }
     }
 
+    /**
+     * This method checks if the board size is valid
+     * @param row is type int for the rows of the board
+     * @param col is type int for the columns of the board
+     * @return boolean for if the board is valid or not
+     */
     private boolean checkIsValid(int row, int col){
         if(row >= 0 && row < boardSize && col >= 0 && col < boardSize){
             return !board[row][col].isVisited();
@@ -64,6 +70,10 @@ public class DepthFirstGenerator extends MazeGenerator{
         return false;
     }
 
+    /**
+     * Randomizes where the neighbor cells will be for the maze
+     * @return neighbors for the cells of the maze
+     */
     private List<Offset> randomNeighbors()
     {
         List<Offset> neighbors = new LinkedList<>(){{
