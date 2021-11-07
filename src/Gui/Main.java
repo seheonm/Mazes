@@ -24,9 +24,9 @@ import java.io.InputStream;
 
 public class Main extends Application {
 
-    int tileSize = 100;
-    int boardSize = 600;
-    Maze m = new Maze(boardSize/tileSize, new DepthFirstGenerator(), new BasicSolver());
+    int tileSize = 70; //100
+    int boardSize = 500; //600
+    Maze m = new Maze(boardSize/tileSize, new DepthFirstGenerator(), new WallSolver());
     public static void main(String[] args){
         launch(args);
     }

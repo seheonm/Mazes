@@ -3,6 +3,7 @@ package Maze;
 import MazeGenerators.*;
 import MazeSolvers.MazeSolver;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -32,10 +33,21 @@ public class Maze {
         this.mazeGenerator.generate();
         setRandomOpenings();
         clearVisited();
+        for (int i = 0 ; i < size; i++){
+            for(int j = 0; j < size; j++){
+                Cell c = maze[i][j];
+                c.Direct_Call = new HashMap<>();
+                c.Direct_Call.put("NORTH", c.getTop());
+                c.Direct_Call.put("WEST", c.getLeft());
+                c.Direct_Call.put("SOUTH", c.getBottom());
+                c.Direct_Call.put("EAST", c.getRight());
+            }
+        }
         return maze;
     }
 
     public void solve(Runnable reRender){
+        System.out.println("Solving......");
         solver.solve(bottomOpening, topOpening, reRender, () -> clearAllButSolved());
     }
 
