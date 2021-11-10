@@ -1,12 +1,9 @@
 package MazeSolvers;
 
 import Maze.Cell;
-import Maze.Maze;
 import Maze.OpeningCell;
 import javafx.application.Platform;
-import javafx.scene.control.skin.TextInputControlSkin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +17,7 @@ public class WallSolver extends BaseSolver implements Runnable{
     public void run() {
         System.out.println("Run Wall Follower");
 
+        //For Right-Hand Rule
         Directions = new HashMap<>();
         List<String> list1 = Arrays.asList("EAST", "NORTH", "WEST", "SOUTH");
         List<String> list2 = Arrays.asList("NORTH", "WEST", "SOUTH", "EAST");
@@ -30,16 +28,27 @@ public class WallSolver extends BaseSolver implements Runnable{
         Directions.put("SOUTH", list3);
         Directions.put("EAST", list4);
 
-        current_dir = "NORTH";
+        new Thread(() -> { // Going down
+            current_dir = "SOUTH";
+            end.setVisited(true);
+            solveRecursive(end.getBottom(), current_dir);
+
+            Platform.runLater(() -> {
+                clearAllButSolved.run();
+                reRender.run();
+            });
+        }).start();
 
 
-        start.setVisited(true);
-        solveRecursive(start.getTop(), current_dir);
-
-        Platform.runLater(() -> {
-            clearAllButSolved.run();
-            reRender.run();
-        });
+        new Thread(() -> { // Going up
+            current_dir = "NORTH";
+            start.setVisited(true);
+            solveRecursive(start.getTop(), current_dir);
+            Platform.runLater(() -> {
+                clearAllButSolved.run();
+                reRender.run();
+            });
+        }).start();
     }
 
     private boolean solveRecursive(Cell c, String current_dir){
