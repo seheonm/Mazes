@@ -66,6 +66,7 @@ public class Maze {
     }
 
     private void clearAllButSolved(){
+        System.out.println("Got called");
         for (Cell[] row : this.maze){
             for(Cell c : row) {
                 if(!c.isSolutionPath()){
