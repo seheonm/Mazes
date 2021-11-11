@@ -1,17 +1,22 @@
+//This class is the Lightning Solver algorithm
+
 package MazeSolvers;
 
 import Maze.Cell;
 import Maze.OpeningCell;
 import javafx.application.Platform;
 
-import java.util.*;
+import java.util.ArrayDeque;
 
 public class LightningSolver extends BaseSolver{
+
+    public LightningSolver(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved){
+        super(start,end,reRender,clearAllButSolved);
+    }
 
     @Override
     public void run() {
         System.out.println("Run Lightning Follower");
-
 
         end.setVisited(true);
         solveBFS(end.getBottom());
@@ -22,7 +27,11 @@ public class LightningSolver extends BaseSolver{
         });
     }
 
-
+    /**
+     * Checks to see if the cell was visited or not
+     * @param begin of type Cell
+     * @return boolean if the cell was visited or not
+     */
     private boolean solveBFS(Cell begin) {
         if (begin.isVisited()){
             return false;
@@ -90,3 +99,5 @@ public class LightningSolver extends BaseSolver{
         return true;
     }
 }
+
+

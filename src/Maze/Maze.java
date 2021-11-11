@@ -1,11 +1,13 @@
+//This class sets all the information for the maze
+
 package Maze;
 
 import MazeGenerators.*;
-import MazeSolvers.MazeSolver;
+import MazeSolvers.BaseSolver;
+import MazeSolvers.SolverFactory;
 
 import java.util.HashMap;
 import java.util.Random;
-import java.util.function.Function;
 
 public class Maze {
     private Cell[][] maze;
@@ -13,28 +15,33 @@ public class Maze {
     private Cell topOpening;
     private Cell bottomOpening;
     private MazeGenerator mazeGenerator;
-    private MazeSolver solver;
+    private BaseSolver solver;
 
-    public Maze(int size, MazeGenerator mazeGenerator, MazeSolver solver) {
+    public Maze(int size, String generatorString, String solverString, Runnable reRender) {
         this.maze = new Cell[size][size];
         this.size = size;
-        this.mazeGenerator = mazeGenerator;
-        this.solver = solver;
-
+        this.mazeGenerator = GeneratorFactory.generate(generatorString, maze, size);
         for (int i = 0 ; i < size; i++){
             for(int j = 0; j < size; j++){
                 maze[i][j] = new Cell(i, j);
             }
         }
+        this.generate();
+        this.solver = SolverFactory.generate(solverString, bottomOpening, topOpening,
+                reRender, () -> clearAllButSolved());
     }
 
-    public Cell[][] generate(){
-        mazeGenerator.initGenerator(maze, size);
+    /**
+     * Generates the maze
+     * @return Cell[][]
+     */
+    private Cell[][] generate() {
+        //mazeGenerator.initGenerator(maze, size);
         this.mazeGenerator.generate();
         setRandomOpenings();
         clearVisited();
-        for (int i = 0 ; i < size; i++){
-            for(int j = 0; j < size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 Cell c = maze[i][j];
                 c.Direct_Call = new HashMap<>();
                 c.Direct_Call.put("NORTH", c.getTop());
@@ -46,11 +53,17 @@ public class Maze {
         return maze;
     }
 
-    public void solve(Runnable reRender){
+    /**
+     * Solves the maze
+     */
+    public void solve(){
         System.out.println("Solving......");
-        solver.solve(bottomOpening, topOpening, reRender, () -> clearAllButSolved());
+        solver.start();
     }
 
+    /**
+     * Prints the maze
+     */
     public void printMaze(){
         for (Cell[] row : this.maze){
             for(Cell c : row) {
@@ -61,10 +74,17 @@ public class Maze {
 
     }
 
+    /**
+     * Gets the maze
+     * @return type Cell[][]
+     */
     public Cell[][] getMaze() {
         return maze;
     }
 
+    /**
+     * Clears all the tried paths except the solving path
+     */
     private void clearAllButSolved(){
         System.out.println("Got called");
         for (Cell[] row : this.maze){
@@ -76,6 +96,9 @@ public class Maze {
         }
     }
 
+    /**
+     * Sets the random openings in the maze
+     */
     private void setRandomOpenings(){
         Random r = new Random();
 
@@ -90,6 +113,9 @@ public class Maze {
         bottomOpening.setTopNeighbor(maze[size-1][column]);
     }
 
+    /**
+     * Clear the visited cells
+     */
     private void clearVisited(){
         for (Cell[] row : this.maze) {
             for (Cell c : row) {
@@ -98,10 +124,18 @@ public class Maze {
         }
     }
 
+    /**
+     * Get the top opening of the maze
+     * @return
+     */
     public Cell getTopOpening() {
         return topOpening;
     }
 
+    /**
+     * Get the bottom opening of the maze
+     * @return
+     */
     public Cell getBottomOpening() {
         return bottomOpening;
     }

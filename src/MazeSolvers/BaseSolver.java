@@ -1,11 +1,14 @@
+//This class is the base class for the solver algorithms
+
 package MazeSolvers;
 
 import Maze.Cell;
+import javafx.application.Platform;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseSolver extends Thread implements MazeSolver{
+public abstract class BaseSolver extends Thread {
     protected Cell start;
     protected Cell end;
     protected Runnable reRender;
@@ -16,18 +19,17 @@ public abstract class BaseSolver extends Thread implements MazeSolver{
     @Override
     public abstract void run();
 
-    @Override
-    public void solve(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved){
+    public BaseSolver(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved) {
         this.start = start;
         this.end = end;
+        this.path = new LinkedList<>();
         this.reRender = reRender;
         this.clearAllButSolved = clearAllButSolved;
-        this.path = new LinkedList<>();
         running = true;
         setDaemon(true);
-        this.start();
-    };
-    public void solve(Cell start, Cell end, List<Cell> path, Runnable reRender, Runnable clearAllButSolved){
+    }
+
+    public BaseSolver(Cell start, Cell end, List<Cell> path, Runnable reRender, Runnable clearAllButSolved){
         this.start = start;
         this.end = end;
         this.path = path;
@@ -35,8 +37,22 @@ public abstract class BaseSolver extends Thread implements MazeSolver{
         this.clearAllButSolved = clearAllButSolved;
         running = true;
         setDaemon(true);
-        this.start();
-    };
+    }
+
+    /**
+     * Animates the path going through the maze.
+     * @param animationDelay of type int for speed of the path in milliseconds
+     */
+    protected void animate(int animationDelay) {
+        try {
+            Thread.sleep(animationDelay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Platform.runLater(() -> {
+            reRender.run();
+        });
+    }
 
     public void stopSolver(){
         running = false;
