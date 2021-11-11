@@ -1,5 +1,7 @@
 package Maze;
 
+import java.util.HashMap;
+
 public class Cell {
     public int row;
     public int col;
@@ -7,8 +9,10 @@ public class Cell {
     private Cell bottom;
     private Cell left;
     private Cell right;
+    private Cell previous;
     private boolean visited;
     private boolean solutionPath;
+    public HashMap<String, Cell> Direct_Call;
 
     public Cell(int row, int col){
         this.row = row;
@@ -40,6 +44,7 @@ public class Cell {
     public void setRightNeighbor(Cell c){
         this.right = c;
     }
+    public void setPrevious(Cell c) { this.previous = c; }
 
     public Cell getBottom() {
         return bottom;
@@ -56,6 +61,8 @@ public class Cell {
     public Cell getRight() {
         return right;
     }
+
+    public Cell getPrevious() { return previous; }
 
     public void setSolutionPath(boolean solutionPath) {
         this.solutionPath = solutionPath;
