@@ -27,6 +27,7 @@ public class BasicSolver extends BaseSolver{
         // Mouse Died
     }
 
+
     private boolean mouseSolve(Cell c){
         if(solved || c == null || c.isVisited()) return false;
 

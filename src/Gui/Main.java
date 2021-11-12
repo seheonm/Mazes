@@ -25,9 +25,9 @@ import java.io.*;
 
 public class Main extends Application {
 
-    int tileSize = 100;
-    int boardSize = 600;
-    Maze m = new Maze(boardSize/tileSize, new DepthFirstGenerator(), new BasicSolver());
+    int tileSize = 70; //100
+    int boardSize = 500; //600
+    Maze m = new Maze(boardSize/tileSize, new DepthFirstGenerator(), new WallSolver());
     public static void main(String[] args){
         launch(args);
     }
@@ -104,6 +104,13 @@ public class Main extends Application {
 
     }
 
+    /**
+     * This method displays the Maze
+     * @param pane of type GridPane lays out the children with a flexible grid
+     * @param maze of type Maze to be displayed
+     * @param size of type int for the size of the maze
+     * @param imageSize of type int to add in the image
+     */
     private void displayMaze(GridPane pane, Maze maze, int size, int imageSize){
         pane.getChildren().clear();
 
@@ -125,6 +132,15 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * This method gets the Cell's Image
+     * @param imageSize of type int is the size of the image chosen
+     * @param imageNum of type int is which image is being used
+     * @param visible of type boolean is to check if the image is shown
+     * @param row of type int is the row place of the image
+     * @param col of type int is the column place of the image
+     * @return imageView to see the image
+     */
     private ImageView getCellImage(int imageSize, int imageNum, boolean visible, int row, int col){
         InputStream stream = null;
         try {

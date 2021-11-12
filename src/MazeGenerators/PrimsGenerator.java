@@ -48,6 +48,10 @@ public class PrimsGenerator extends MazeGenerator{
         }
     }
 
+    /**
+     * Adds walls to the cells for the rows and columns
+     * @param c of type Cell for placement
+     */
     private void addWallsToList(Cell c){
         if(c.row > 0){
             walls.add(new Wall(c.row, c.col, false));
