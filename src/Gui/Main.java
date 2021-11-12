@@ -8,6 +8,7 @@ import MazeSolvers.LightningSolver;
 import MazeSolvers.RandomMouseSolver;
 import MazeSolvers.WallSolver;
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -18,9 +19,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 public class Main extends Application {
 
@@ -132,7 +133,7 @@ public class Main extends Application {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Image image = new Image(stream);
+        Image image = new Image(stream, imageSize, imageSize, false, false);
         //Creating the image view
         ImageView imageView = new ImageView();
         imageView.setFitHeight(imageSize);
@@ -140,6 +141,11 @@ public class Main extends Application {
         imageView.setImage(image);
         GridPane.setRowIndex(imageView, row+1);
         GridPane.setColumnIndex(imageView, col);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return imageView;
     }

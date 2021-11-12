@@ -25,7 +25,6 @@ public class DepthFirstGenerator extends MazeGenerator{
 
             current.setVisited(true);
 
-
             for(Offset offset : randomNeighbors()){
                 int newRow = current.row + offset.upDown;
                 int newCol = current.col + offset.leftRight;
