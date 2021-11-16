@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class PrimsGenerator extends MazeGenerator{
     private List<Wall> walls;
@@ -15,7 +16,7 @@ public class PrimsGenerator extends MazeGenerator{
     }
 
     @Override
-    public void generate() {
+    public void generate(Consumer<Cell> addToBoard) {
         Random r = new Random();
         // pick random cell
         Cell starting = board[r.nextInt(boardSize)][r.nextInt(boardSize)];
@@ -40,6 +41,13 @@ public class PrimsGenerator extends MazeGenerator{
                 else{
                     c1.setTopNeighbor(c2);
                     c2.setBottomNeighbor(c1);
+                }
+                try {
+                    addToBoard.accept(c1);
+                    addToBoard.accept(c2);
+                    Thread.sleep(waitTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 addWallsToList(c1.isVisited() ? c2 : c1);
                 c1.setVisited(true);

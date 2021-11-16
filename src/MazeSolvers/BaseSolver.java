@@ -13,6 +13,8 @@ public abstract class BaseSolver extends Thread implements MazeSolver{
     protected List<Cell> path;
     protected boolean running;
 
+    protected final int waitTime = 30;
+
     @Override
     public abstract void run();
 
