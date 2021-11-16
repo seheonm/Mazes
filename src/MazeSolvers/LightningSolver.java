@@ -17,14 +17,8 @@ public class LightningSolver extends BaseSolver{
     @Override
     public void run() {
         System.out.println("Run Lightning Follower");
-
         end.setVisited(true);
         solveBFS(end.getBottom());
-
-        Platform.runLater(() -> {
-            clearAllButSolved.run();
-            reRender.run();
-        });
     }
 
     /**
@@ -86,11 +80,15 @@ public class LightningSolver extends BaseSolver{
                 break;
             }
         }
-        // loop from end to begin
+
+        clearAllButSolved.run();
         Cell curr = end;
+        // loop from end to begin
         while (true) {
             curr.setSolutionPath(true);
-            // draw water here
+            curr.setVisited(true);
+            animate(100);
+            // draw lightning here
             if (curr == begin) break;
             curr = curr.getPrevious();
         }
