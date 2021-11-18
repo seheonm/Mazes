@@ -4,13 +4,9 @@ package MazeGenerators;
 
 import Maze.Cell;
 
-import java.util.function.Consumer;
-
 public abstract class MazeGenerator {
     protected int boardSize;
     protected Cell[][] board;
-
-    protected final int waitTime = 10;
 
     public MazeGenerator(){};
 
@@ -22,5 +18,5 @@ public abstract class MazeGenerator {
     /**
      * Generates the maze
      */
-    public abstract void generate(Consumer<Cell> addToBoard);
+    public abstract void generate();
 }
