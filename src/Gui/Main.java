@@ -1,12 +1,7 @@
-/**
- * CS351L Project 4- Mazes
- * Marina Seheon, Joseph Barela, Ruby Ta
- * This is the main class
- */
-
 package Gui;
 
 import Maze.*;
+import MazeGenerators.*;
 
 import MazeSolvers.*;
 import javafx.application.Application;
@@ -15,13 +10,17 @@ import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Main extends Application {
@@ -98,7 +97,6 @@ public class Main extends Application {
         stage.setTitle("Maze");
 
         HBox hBox = new HBox();
-        GridPane pane = new GridPane();
         BorderPane borderPane = new BorderPane();
         //Pipes need to be transparent before changing the background
         borderPane.setTop(hBox);
