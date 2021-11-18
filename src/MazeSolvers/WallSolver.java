@@ -1,9 +1,8 @@
-//This is the Wall Solver algorithm
-
 package MazeSolvers;
 
 import Maze.Cell;
 import Maze.OpeningCell;
+import MazeGenerators.Wall;
 import javafx.application.Platform;
 
 import java.util.*;
@@ -14,12 +13,7 @@ public class WallSolver extends BaseSolver implements Runnable{
     Cell cell;
     Cell cell2;
     long threadNorthID, threadSouthID;
-    HashSet<Cell> list1= new HashSet<>();
-    HashSet<Cell> list2= new HashSet<>();
 
-    public WallSolver(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved){
-        super(start,end,reRender,clearAllButSolved);
-    }
 
     @Override
     public void run() {
@@ -87,12 +81,9 @@ public class WallSolver extends BaseSolver implements Runnable{
         }).start();
     }
 
-    /**
-     * Solves the Wall Solver algorithm recursively
-     * @param c of type Cell
-     * @param current_dir of type String
-     * @return boolean to check if there is a solution
-     */
+    HashSet<Cell> list1= new HashSet<>();
+    HashSet<Cell> list2= new HashSet<>();
+
     private boolean solveRecursive(Cell c, String current_dir){
 
         if(!Collections.disjoint(list1, list2)) {
