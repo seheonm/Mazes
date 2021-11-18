@@ -1,6 +1,9 @@
+//This is the Kruskal Generator algorithm
+
 package MazeGenerators;
 
 import Maze.Cell;
+import Maze.Wall;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -9,16 +12,16 @@ public class KruskalGenerator extends MazeGenerator {
     private List<Set<Cell>> cellSets;
     private List<Wall> walls;
 
-    @Override
-    protected void init(){
+    public KruskalGenerator(Cell[][] board, int size) {
+        super(board, size);
         cellSets = new LinkedList<>();
         walls = new LinkedList<>();
 
 
         // list of all wall indexes
-        for(int i = 0; i < boardSize; i++){
-            for(int j = 0; j < boardSize ; j ++){
-                if(i != 0){
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (i != 0) {
                     walls.add(new Wall(i, j, false));
                 }
                 if (j != boardSize - 1) {
@@ -28,9 +31,9 @@ public class KruskalGenerator extends MazeGenerator {
         }
 
         // create set for each cell
-        for(Cell[] row : board){
-            for(Cell c : row){
-                cellSets.add(new HashSet<>(){{
+        for (Cell[] row : board) {
+            for (Cell c : row) {
+                cellSets.add(new HashSet<>() {{
                     add(c);
                 }});
             }

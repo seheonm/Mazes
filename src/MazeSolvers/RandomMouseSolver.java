@@ -1,3 +1,5 @@
+//This class is the algorithm for the Random Mouse Solver
+
 package MazeSolvers;
 
 import Maze.Cell;
@@ -5,9 +7,19 @@ import Maze.OpeningCell;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RandomMouseSolver extends BaseSolver{
     private static boolean solved = false;
+
+    public RandomMouseSolver(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved){
+        super(start,end,reRender,clearAllButSolved);
+    }
+
+    public RandomMouseSolver(Cell start, Cell end, List<Cell> path, Runnable reRender, Runnable clearAllButSolved) {
+        super(start,end,path,reRender,clearAllButSolved);
+    }
+
     @Override
     public void run(){
         // New Mouse
@@ -51,10 +63,10 @@ public class RandomMouseSolver extends BaseSolver{
             if(mouseSolve(c.getLeft())) return true;
             if(mouseSolve(c.getRight())) return true;
         } else {
-            new BasicSolver().solve(c.getTop(), end, new ArrayList<>(path), reRender, clearAllButSolved);
-            new BasicSolver().solve(c.getBottom(), end, new ArrayList<>(path), reRender, clearAllButSolved);
-            new BasicSolver().solve(c.getLeft(), end, new ArrayList<>(path), reRender, clearAllButSolved);
-            new BasicSolver().solve(c.getRight(), end, new ArrayList<>(path), reRender, clearAllButSolved);
+            new BasicSolver(c.getTop(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
+            new BasicSolver(c.getBottom(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
+            new BasicSolver(c.getLeft(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
+            new BasicSolver(c.getRight(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
         }
         return false;
     }

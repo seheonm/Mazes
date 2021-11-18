@@ -1,3 +1,4 @@
+
 package MazeSolvers;
 
 import Maze.Cell;
@@ -5,14 +6,23 @@ import Maze.OpeningCell;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BasicSolver extends BaseSolver{
     private static boolean solved = false;
+
+    public BasicSolver(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved) {
+        super(start,end,reRender,clearAllButSolved);
+    }
+
+    public BasicSolver(Cell start, Cell end, List<Cell> path, Runnable reRender, Runnable clearAllButSolved) {
+        super(start,end,path,reRender,clearAllButSolved);
+    }
+
     @Override
     public void run(){
         // New Mouse
         if (!solved && mouseSolve(start)) {
-
             // Solved
             for(Cell c : path){
                 c.setSolutionPath(true);
@@ -22,7 +32,6 @@ public class BasicSolver extends BaseSolver{
                 clearAllButSolved.run();
                 reRender.run();
             });
-
         }
         // Mouse Died
     }
@@ -30,7 +39,6 @@ public class BasicSolver extends BaseSolver{
 
     private boolean mouseSolve(Cell c){
         if(solved || c == null || c.isVisited()) return false;
-
         try {
             Thread.sleep(waitTime);
             Platform.runLater(() -> {
@@ -51,10 +59,10 @@ public class BasicSolver extends BaseSolver{
             if(mouseSolve(c.getLeft())) return true;
             if(mouseSolve(c.getRight())) return true;
         } else {
-            new BasicSolver().solve(c.getTop(), end, new ArrayList<>(path), reRender, clearAllButSolved);
-            new BasicSolver().solve(c.getBottom(), end, new ArrayList<>(path), reRender, clearAllButSolved);
-            new BasicSolver().solve(c.getLeft(), end, new ArrayList<>(path), reRender, clearAllButSolved);
-            new BasicSolver().solve(c.getRight(), end, new ArrayList<>(path), reRender, clearAllButSolved);
+            new BasicSolver(c.getTop(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
+            new BasicSolver(c.getBottom(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
+            new BasicSolver(c.getLeft(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
+            new BasicSolver(c.getRight(), end, new ArrayList<>(path), reRender, clearAllButSolved).start();
         }
         return false;
     }
