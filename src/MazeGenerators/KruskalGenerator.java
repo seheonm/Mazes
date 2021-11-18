@@ -6,6 +6,7 @@ import Maze.Cell;
 import Maze.Wall;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class KruskalGenerator extends MazeGenerator {
     private List<Set<Cell>> cellSets;
@@ -40,7 +41,7 @@ public class KruskalGenerator extends MazeGenerator {
     }
 
     @Override
-    public void generate() {
+    public void generate(Consumer<Cell> addToBoard) {
         Collections.shuffle(walls);
         for (Wall w : walls){
             Cell c1 = board[w.row][w.col];
@@ -70,6 +71,13 @@ public class KruskalGenerator extends MazeGenerator {
                 else{
                     c1.setTopNeighbor(c2);
                     c2.setBottomNeighbor(c1);
+                }
+                try {
+                    addToBoard.accept(c1);
+                    addToBoard.accept(c2);
+                    Thread.sleep(waitTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 cellSets.remove(c2Set);
                 c1Set.addAll(c2Set);

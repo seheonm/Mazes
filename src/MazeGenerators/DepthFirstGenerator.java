@@ -5,6 +5,7 @@ package MazeGenerators;
 import Maze.Cell;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class DepthFirstGenerator extends MazeGenerator{
     private Stack<Cell> cellStack;
@@ -15,7 +16,7 @@ public class DepthFirstGenerator extends MazeGenerator{
     }
 
     @Override
-    public void generate(){
+    public void generate(Consumer<Cell> addToBoard){
         Random r = new Random();
         int row = r.nextInt(boardSize);
         int col = r.nextInt(boardSize);
@@ -52,6 +53,13 @@ public class DepthFirstGenerator extends MazeGenerator{
                         newCell.setRightNeighbor(current);
                     }
                     cellStack.push(newCell);
+                    try {
+                        addToBoard.accept(current);
+                        Thread.sleep(waitTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
                 }
             }

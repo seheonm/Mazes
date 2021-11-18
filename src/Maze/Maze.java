@@ -3,27 +3,34 @@
 package Maze;
 
 import MazeGenerators.*;
-import MazeSolvers.BaseSolver;
-import MazeSolvers.SolverFactory;
+import MazeSolvers.MazeSolver;
+import javafx.application.Platform;
 
 import java.util.HashMap;
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Maze {
+    private boolean[][] visited;
     private Cell[][] maze;
     private int size;
     private Cell topOpening;
+    private boolean topSeen;
     private Cell bottomOpening;
+    private boolean bottomSeen;
     private MazeGenerator mazeGenerator;
     private BaseSolver solver;
 
     public Maze(int size, String generatorString, String solverString, Runnable reRender) {
         this.maze = new Cell[size][size];
+        this.visited = new boolean[size][size];
         this.size = size;
         this.mazeGenerator = GeneratorFactory.generate(generatorString, maze, size);
         for (int i = 0 ; i < size; i++){
             for(int j = 0; j < size; j++){
                 maze[i][j] = new Cell(i, j);
+                visited[i][j] = false;
             }
         }
         this.generate();
@@ -31,34 +38,36 @@ public class Maze {
                 reRender, () -> clearAllButSolved());
     }
 
-    /**
-     * Generates the maze
-     * @return Cell[][]
-     */
-    private Cell[][] generate() {
-        //mazeGenerator.initGenerator(maze, size);
-        this.mazeGenerator.generate();
-        setRandomOpenings();
-        clearVisited();
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Cell c = maze[i][j];
-                c.Direct_Call = new HashMap<>();
-                c.Direct_Call.put("NORTH", c.getTop());
-                c.Direct_Call.put("WEST", c.getLeft());
-                c.Direct_Call.put("SOUTH", c.getBottom());
-                c.Direct_Call.put("EAST", c.getRight());
+    public Cell[][] generate(Consumer<Cell> addToBoard, Runnable reRender, Runnable x){
+        Thread t = new Thread(() -> {
+            mazeGenerator.initGenerator(maze, size);
+            this.mazeGenerator.generate(addToBoard);
+            setRandomOpenings();
+            clearVisited();
+            for (int i = 0 ; i < size; i++){
+                for(int j = 0; j < size; j++){
+                    Cell c = maze[i][j];
+                    c.Direct_Call = new HashMap<>();
+                    c.Direct_Call.put("NORTH", c.getTop());
+                    c.Direct_Call.put("WEST", c.getLeft());
+                    c.Direct_Call.put("SOUTH", c.getBottom());
+                    c.Direct_Call.put("EAST", c.getRight());
+                }
             }
-        }
+            Platform.runLater(x);
+            solve(reRender, x);
+        });
+        t.setDaemon(true);
+        t.start();
         return maze;
     }
 
-    /**
-     * Solves the maze
-     */
-    public void solve(){
+    public void solve(Runnable reRender, Runnable lastRender){
         System.out.println("Solving......");
-        solver.start();
+        solver.solve(bottomOpening, topOpening, reRender, () -> {
+            clearAllButSolved();
+            lastRender.run();
+        });
     }
 
     /**
@@ -140,4 +149,27 @@ public class Maze {
         return bottomOpening;
     }
 
+    public boolean isVisited(int row, int col){
+        return this.visited[row][col];
+    }
+
+    public void setVisited(int row, int col){
+        this.visited[row][col] = true;
+    }
+
+    public boolean isBottomSeen() {
+        return bottomSeen;
+    }
+
+    public boolean isTopSeen() {
+        return topSeen;
+    }
+
+    public void setBottomSeen(boolean bottomSeen) {
+        this.bottomSeen = bottomSeen;
+    }
+
+    public void setTopSeen(boolean topSeen) {
+        this.topSeen = topSeen;
+    }
 }

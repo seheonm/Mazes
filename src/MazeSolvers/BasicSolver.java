@@ -40,7 +40,7 @@ public class BasicSolver extends BaseSolver{
     private boolean mouseSolve(Cell c){
         if(solved || c == null || c.isVisited()) return false;
         try {
-            Thread.sleep(500);
+            Thread.sleep(waitTime);
             Platform.runLater(() -> {
                 if(!solved) reRender.run();
             });
