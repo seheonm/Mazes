@@ -52,6 +52,7 @@ public class Main extends Application {
         maze.printMaze();
         maze.solve();
     }
+    
 
     /**
      * This method displays the Maze
