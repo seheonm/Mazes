@@ -1,5 +1,3 @@
-//This is the Depths First Generator algorithm
-
 package MazeGenerators;
 
 import Maze.Cell;
@@ -10,8 +8,8 @@ import java.util.function.Consumer;
 public class DepthFirstGenerator extends MazeGenerator{
     private Stack<Cell> cellStack;
 
-    public DepthFirstGenerator(Cell[][] board, int size) {
-        super(board,size);
+    @Override
+    protected void init(){
         cellStack = new Stack<>();
     }
 

@@ -1,10 +1,6 @@
-//This is the Prims Generator algorithm
-
 package MazeGenerators;
 
 import Maze.Cell;
-import Maze.Wall;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +10,8 @@ import java.util.function.Consumer;
 public class PrimsGenerator extends MazeGenerator{
     private List<Wall> walls;
 
-    public PrimsGenerator(Cell[][] board, int size) {
-        super(board,size);
+    @Override
+    protected void init(){
         walls = new LinkedList<>();
     }
 

@@ -1,5 +1,3 @@
-//This class sets all the information for the maze
-
 package Maze;
 
 import MazeGenerators.*;
@@ -20,22 +18,21 @@ public class Maze {
     private Cell bottomOpening;
     private boolean bottomSeen;
     private MazeGenerator mazeGenerator;
-    private BaseSolver solver;
+    private MazeSolver solver;
 
-    public Maze(int size, String generatorString, String solverString, Runnable reRender) {
+    public Maze(int size, MazeGenerator mazeGenerator, MazeSolver solver) {
         this.maze = new Cell[size][size];
         this.visited = new boolean[size][size];
         this.size = size;
-        this.mazeGenerator = GeneratorFactory.generate(generatorString, maze, size);
+        this.mazeGenerator = mazeGenerator;
+        this.solver = solver;
+
         for (int i = 0 ; i < size; i++){
             for(int j = 0; j < size; j++){
                 maze[i][j] = new Cell(i, j);
                 visited[i][j] = false;
             }
         }
-        this.generate();
-        this.solver = SolverFactory.generate(solverString, bottomOpening, topOpening,
-                reRender, () -> clearAllButSolved());
     }
 
     public Cell[][] generate(Consumer<Cell> addToBoard, Runnable reRender, Runnable x){
@@ -70,9 +67,6 @@ public class Maze {
         });
     }
 
-    /**
-     * Prints the maze
-     */
     public void printMaze(){
         for (Cell[] row : this.maze){
             for(Cell c : row) {
@@ -83,17 +77,10 @@ public class Maze {
 
     }
 
-    /**
-     * Gets the maze
-     * @return type Cell[][]
-     */
     public Cell[][] getMaze() {
         return maze;
     }
 
-    /**
-     * Clears all the tried paths except the solving path
-     */
     private void clearAllButSolved(){
         System.out.println("Got called");
         for (Cell[] row : this.maze){
@@ -105,9 +92,6 @@ public class Maze {
         }
     }
 
-    /**
-     * Sets the random openings in the maze
-     */
     private void setRandomOpenings(){
         Random r = new Random();
 
@@ -122,9 +106,6 @@ public class Maze {
         bottomOpening.setTopNeighbor(maze[size-1][column]);
     }
 
-    /**
-     * Clear the visited cells
-     */
     private void clearVisited(){
         for (Cell[] row : this.maze) {
             for (Cell c : row) {
@@ -133,18 +114,10 @@ public class Maze {
         }
     }
 
-    /**
-     * Get the top opening of the maze
-     * @return
-     */
     public Cell getTopOpening() {
         return topOpening;
     }
 
-    /**
-     * Get the bottom opening of the maze
-     * @return
-     */
     public Cell getBottomOpening() {
         return bottomOpening;
     }
