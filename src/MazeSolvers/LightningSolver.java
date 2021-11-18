@@ -37,7 +37,7 @@ public class LightningSolver extends BaseSolver{
         while (queue.size() != 0)
         {
             try {
-                Thread.sleep(waitTime);
+                Thread.sleep(100);
                 Platform.runLater(() -> {
                     reRender.run();
                 });
