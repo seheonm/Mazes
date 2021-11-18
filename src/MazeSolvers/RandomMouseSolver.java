@@ -44,7 +44,7 @@ public class RandomMouseSolver extends BaseSolver{
         if(solved || c == null || c.isVisited()) return false;
 
         try {
-            Thread.sleep(waitTime);
+            Thread.sleep(500);
             Platform.runLater(() -> {
                 if(!solved) reRender.run();
             });
