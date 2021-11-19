@@ -1,3 +1,4 @@
+//Generator using Kruskal Generator algorithm
 package MazeGenerators;
 
 import Maze.Cell;
@@ -37,6 +38,10 @@ public class KruskalGenerator extends MazeGenerator {
         }
     }
 
+    /**
+     * Generate maze using Kruskal's algorithm
+     * @param addToBoard add to GUI board
+     */
     @Override
     public void generate(Consumer<Cell> addToBoard) {
         Collections.shuffle(walls);

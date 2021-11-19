@@ -1,5 +1,6 @@
-package MazeSolvers;
+//Lightning solver class
 
+package MazeSolvers;
 import Maze.Cell;
 import Maze.OpeningCell;
 import javafx.application.Platform;
@@ -10,14 +11,16 @@ public class LightningSolver extends BaseSolver{
 
     @Override
     public void run() {
-        System.out.println("Run Lightning Follower");
-
-
         end.setVisited(true);
         solveBFS(end.getBottom());
     }
 
 
+    /**
+     * Solve the maze using BFS-based algorithm
+     * @param begin top opening
+     * @return true if there's a solution
+     */
     private boolean solveBFS(Cell begin) {
         if (begin.isVisited()){
             return false;
@@ -30,9 +33,7 @@ public class LightningSolver extends BaseSolver{
         {
             try {
                 Thread.sleep(waitTime);
-                Platform.runLater(() -> {
-                    reRender.run();
-                });
+                Platform.runLater(() -> reRender.run());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -73,9 +74,7 @@ public class LightningSolver extends BaseSolver{
             }
         }
 
-        Platform.runLater(() -> {
-            clearAllButSolved.run();
-        });
+        Platform.runLater(() -> clearAllButSolved.run());
 
         // loop from end to begin
         Cell curr = end;
@@ -84,9 +83,7 @@ public class LightningSolver extends BaseSolver{
             curr.setVisited(true);
             try {
                 Thread.sleep(100);
-                Platform.runLater(() -> {
-                    reRender.run();
-                });
+                Platform.runLater(() -> reRender.run());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -95,8 +92,6 @@ public class LightningSolver extends BaseSolver{
             if (curr == begin) break;
             curr = curr.getPrevious();
         }
-
-        System.out.println("Hooray!");
         return true;
     }
 }

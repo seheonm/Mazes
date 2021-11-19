@@ -1,3 +1,4 @@
+//Create wall for the maze
 package MazeGenerators;
 
 public class Wall {

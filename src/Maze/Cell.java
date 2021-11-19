@@ -1,3 +1,5 @@
+//This class is all the information for the cells of the maze
+
 package Maze;
 
 import java.util.HashMap;
@@ -72,6 +74,10 @@ public class Cell {
         return solutionPath;
     }
 
+    /**
+     * Get picture number
+     * @return picture number
+     */
     public int getPicNumber(){
         if ((top != null || bottom != null) && left == null && right == null){
             return 5;
@@ -103,30 +109,42 @@ public class Cell {
         return 'x';
     }
 
+
+    /**
+     * Get the symbols/chars to display the maze
+     * @return symbol/char
+     */
     public char getChar(){
-        if ((top != null || bottom != null) && left == null && right == null){
+        if ((top != null || bottom != null) &&
+                left == null && right == null){
             if(top == null) return '╥';
             if (bottom == null) return '╨';
             return '║';
         }
-        else if (top == null && bottom == null && (left != null || right != null)){
+        else if (top == null && bottom == null &&
+                (left != null || right != null)){
             if(left == null) return '╞';
             if(right == null) return '╡';
             return '═';
         }
-        else if (top == null && bottom != null && left != null && right == null){
+        else if (top == null && bottom != null &&
+                left != null && right == null){
             return '╗';
         }
-        else if (top != null && bottom == null && left != null && right == null){
+        else if (top != null && bottom == null &&
+                left != null && right == null){
             return '╝';
         }
-        else if (top == null && bottom != null && left == null && right != null){
+        else if (top == null && bottom != null &&
+                left == null && right != null){
             return '╔';
         }
-        else if (top != null && bottom == null && left == null && right != null){
+        else if (top != null && bottom == null &&
+                left == null && right != null){
             return '╚';
         }
-        else if (top != null && bottom != null && left != null && right != null){
+        else if (top != null && bottom != null &&
+                left != null && right != null){
             return '╬';
         }
         else if (top != null && bottom != null){

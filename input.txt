@@ -1,4 +1,4 @@
-600
-30
-prim
+400
+40
+dfs
 lightning

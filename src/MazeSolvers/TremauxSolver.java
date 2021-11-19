@@ -6,16 +6,10 @@ package MazeSolvers;
 import Maze.Cell;
 import Maze.OpeningCell;
 import javafx.application.Platform;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class TremauxSolver extends BaseSolver {
 
-//    public TremauxSolver(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved) {
-//        super(start, end, reRender, clearAllButSolved);
-//    }
 
     /**
      * This function collects the unvisited neighboring cells around c
@@ -47,12 +41,9 @@ public class TremauxSolver extends BaseSolver {
     public boolean solveRecursively(Cell c) {
         c.setVisited(true);
 
-//        animate(200);
         try {
             Thread.sleep(waitTime);
-            Platform.runLater(() -> {
-                reRender.run();
-            });
+            Platform.runLater(() -> reRender.run());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -66,12 +57,9 @@ public class TremauxSolver extends BaseSolver {
             }
             //Dead end
             c.setVisited(false);
-//            animate(300);
             try {
                 Thread.sleep(waitTime);
-                Platform.runLater(() -> {
-                    reRender.run();
-                });
+                Platform.runLater(() -> reRender.run());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -87,7 +75,6 @@ public class TremauxSolver extends BaseSolver {
         ArrayList<Cell> lonelyNeighbors = unvisitedNeighbors(this.start);
         for (Cell lonelyNeighbor : lonelyNeighbors) {
             if (solveRecursively(lonelyNeighbor)) {
-                System.out.println("Solution found!");
                 break;
             }
         }

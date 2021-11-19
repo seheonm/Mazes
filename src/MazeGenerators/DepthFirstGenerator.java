@@ -1,3 +1,4 @@
+//This is the Depths First Generator algorithm
 package MazeGenerators;
 
 import Maze.Cell;
@@ -13,6 +14,10 @@ public class DepthFirstGenerator extends MazeGenerator{
         cellStack = new Stack<>();
     }
 
+    /**
+     * Generate the maze using DFS
+     * @param addToBoard add to GUI board
+     */
     @Override
     public void generate(Consumer<Cell> addToBoard){
         Random r = new Random();
@@ -57,7 +62,6 @@ public class DepthFirstGenerator extends MazeGenerator{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                     break;
                 }
             }
@@ -84,16 +88,20 @@ public class DepthFirstGenerator extends MazeGenerator{
     private List<Offset> randomNeighbors()
     {
         List<Offset> neighbors = new LinkedList<>(){{
-            add(new Offset(1,0));
-            add(new Offset(-1,0));
-            add(new Offset(0,1));
-            add(new Offset(0,-1));
+            add(new Offset(1, 0));
+            add(new Offset(-1, 0));
+            add(new Offset(0, 1));
+            add(new Offset(0, -1));
         }};
         Collections.shuffle(neighbors);
         return neighbors;
     }
 
-    private class Offset{
+
+    /**
+     * Offset class deals with each cell's neighbors
+     */
+    private static class Offset{
         public int upDown;
         public int leftRight;
 

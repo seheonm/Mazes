@@ -1,24 +1,24 @@
+//This class sets all the information for the maze
+
 package Maze;
 
 import MazeGenerators.*;
 import MazeSolvers.MazeSolver;
 import javafx.application.Platform;
-
 import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class Maze {
-    private boolean[][] visited;
-    private Cell[][] maze;
-    private int size;
+    private final boolean[][] visited;
+    private final Cell[][] maze;
+    private final int size;
     private Cell topOpening;
     private boolean topSeen;
     private Cell bottomOpening;
     private boolean bottomSeen;
-    private MazeGenerator mazeGenerator;
-    private MazeSolver solver;
+    private final MazeGenerator mazeGenerator;
+    private final MazeSolver solver;
 
     public Maze(int size, MazeGenerator mazeGenerator, MazeSolver solver) {
         this.maze = new Cell[size][size];
@@ -35,7 +35,14 @@ public class Maze {
         }
     }
 
-    public Cell[][] generate(Consumer<Cell> addToBoard, Runnable reRender, Runnable x){
+    /**
+     * Generate the maze
+     * @param addToBoard add to the GUI board
+     * @param reRender re-render
+     * @param x display maze
+     */
+    public void generate(Consumer<Cell> addToBoard,
+                         Runnable reRender, Runnable x){
         Thread t = new Thread(() -> {
             mazeGenerator.initGenerator(maze, size);
             this.mazeGenerator.generate(addToBoard);
@@ -56,17 +63,25 @@ public class Maze {
         });
         t.setDaemon(true);
         t.start();
-        return maze;
     }
 
+    /**
+     * Solve the maze
+     * @param reRender  re-render
+     * @param lastRender last render
+     */
     public void solve(Runnable reRender, Runnable lastRender){
-        System.out.println("Solving......");
         solver.solve(bottomOpening, topOpening, reRender, () -> {
             clearAllButSolved();
             lastRender.run();
         });
     }
 
+
+    /**
+     * Print maze
+     * For debugging
+     */
     public void printMaze(){
         for (Cell[] row : this.maze){
             for(Cell c : row) {
@@ -77,12 +92,18 @@ public class Maze {
 
     }
 
+    /**
+     * @return maze
+     */
     public Cell[][] getMaze() {
         return maze;
     }
 
+
+    /**
+     * Clear all cells except the one path for solution
+     */
     private void clearAllButSolved(){
-        System.out.println("Got called");
         for (Cell[] row : this.maze){
             for(Cell c : row) {
                 if(!c.isSolutionPath()){
@@ -92,6 +113,9 @@ public class Maze {
         }
     }
 
+    /**
+     * Set random opening for the maze
+     */
     private void setRandomOpenings(){
         Random r = new Random();
 
@@ -106,6 +130,9 @@ public class Maze {
         bottomOpening.setTopNeighbor(maze[size-1][column]);
     }
 
+    /**
+     * Set all visited cell unvisited
+     */
     private void clearVisited(){
         for (Cell[] row : this.maze) {
             for (Cell c : row) {

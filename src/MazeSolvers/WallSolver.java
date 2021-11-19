@@ -1,3 +1,4 @@
+//Wall solver class
 package MazeSolvers;
 
 import Maze.Cell;
@@ -15,12 +16,12 @@ public class WallSolver extends BaseSolver implements Runnable{
     private int numThreads = 1;
 
 
-//    /**
-//     * @param numThreads number of threads will be run
-//     */
-//    public WallSolver(int numThreads){
-//        this.numThreads = numThreads;
-//    }
+    /**
+     * @param numThreads number of threads will be run
+     */
+    public WallSolver(int numThreads){
+        this.numThreads = numThreads;
+    }
 
 
     @Override
@@ -111,9 +112,6 @@ public class WallSolver extends BaseSolver implements Runnable{
                 list1.add(c);
             }
         }
-
-
-
 
         if (c.isVisited()){
             return false;

@@ -1,3 +1,4 @@
+//This class is the base class for the solver algorithms
 package MazeSolvers;
 
 import Maze.Cell;
@@ -13,13 +14,21 @@ public abstract class BaseSolver extends Thread implements MazeSolver{
     protected List<Cell> path;
     protected boolean running;
 
-    protected final int waitTime = 300;
+    protected final int waitTime = 200;
 
     @Override
     public abstract void run();
 
+    /**
+     * Solve maze
+     * @param start starting cell
+     * @param end ending cell
+     * @param reRender re-render
+     * @param clearAllButSolved clear all cells but the solved path
+     */
     @Override
-    public void solve(Cell start, Cell end, Runnable reRender, Runnable clearAllButSolved){
+    public void solve(Cell start, Cell end, Runnable reRender,
+                      Runnable clearAllButSolved){
         this.start = start;
         this.end = end;
         this.reRender = reRender;
@@ -28,8 +37,18 @@ public abstract class BaseSolver extends Thread implements MazeSolver{
         running = true;
         setDaemon(true);
         this.start();
-    };
-    public void solve(Cell start, Cell end, List<Cell> path, Runnable reRender, Runnable clearAllButSolved){
+    }
+
+    /**
+     * Solve maze
+     * @param start starting cell
+     * @param end ending cell
+     * @param path solving path
+     * @param reRender re-render
+     * @param clearAllButSolved clear all cells but the solved path
+     */
+    public void solve(Cell start, Cell end, List<Cell> path,
+                      Runnable reRender, Runnable clearAllButSolved){
         this.start = start;
         this.end = end;
         this.path = path;
@@ -38,9 +57,5 @@ public abstract class BaseSolver extends Thread implements MazeSolver{
         running = true;
         setDaemon(true);
         this.start();
-    };
-
-    public void stopSolver(){
-        running = false;
     }
 }

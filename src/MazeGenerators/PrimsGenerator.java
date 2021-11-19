@@ -10,11 +10,18 @@ import java.util.function.Consumer;
 public class PrimsGenerator extends MazeGenerator{
     private List<Wall> walls;
 
+    /**
+     * Initialize walls
+     */
     @Override
     protected void init(){
         walls = new LinkedList<>();
     }
 
+    /**
+     * Generate maze using Prim's algorithm
+     * @param addToBoard add to GUI board
+     */
     @Override
     public void generate(Consumer<Cell> addToBoard) {
         Random r = new Random();
@@ -33,7 +40,8 @@ public class PrimsGenerator extends MazeGenerator{
             int colOffset = w.col + (w.right ? 1 : 0);
             Cell c2 = board[rowOffset][colOffset];
 
-            if ((c1.isVisited() && !c2.isVisited()) || (!c1.isVisited() && c2.isVisited())){
+            if ((c1.isVisited() && !c2.isVisited()) ||
+                    (!c1.isVisited() && c2.isVisited())){
                 if(w.right){
                     c1.setRightNeighbor(c2);
                     c2.setLeftNeighbor(c1);

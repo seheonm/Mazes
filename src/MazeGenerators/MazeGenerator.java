@@ -1,3 +1,4 @@
+//This abstract class generates and initialize the maze
 package MazeGenerators;
 
 import Maze.Cell;
@@ -10,8 +11,13 @@ public abstract class MazeGenerator {
 
     protected final int waitTime = 10;
 
-    public MazeGenerator(){};
+    public MazeGenerator(){}
 
+    /**
+     * Initialize generator
+     * @param board board representation of maze
+     * @param size board size
+     */
     public void initGenerator(Cell[][] board, int size){
         boardSize = size;
         this.board = board;

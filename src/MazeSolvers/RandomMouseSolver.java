@@ -1,3 +1,4 @@
+//Random mouse solver class
 package MazeSolvers;
 
 import Maze.Cell;
@@ -22,12 +23,16 @@ public class RandomMouseSolver extends BaseSolver{
                 clearAllButSolved.run();
                 reRender.run();
             });
-
         }
         // Mouse Died
     }
 
 
+    /**
+     * Mouse solver using recursive method
+     * @param c cell
+     * @return true if there's a solution
+     */
     private boolean mouseSolve(Cell c){
         if(solved || c == null || c.isVisited()) return false;
 
@@ -49,7 +54,7 @@ public class RandomMouseSolver extends BaseSolver{
             if(mouseSolve(c.getTop())) return true;
             if(mouseSolve(c.getBottom())) return true;
             if(mouseSolve(c.getLeft())) return true;
-            if(mouseSolve(c.getRight())) return true;
+            return mouseSolve(c.getRight());
         } else {
             new BasicSolver().solve(c.getTop(), end, new ArrayList<>(path), reRender, clearAllButSolved);
             new BasicSolver().solve(c.getBottom(), end, new ArrayList<>(path), reRender, clearAllButSolved);
@@ -59,6 +64,12 @@ public class RandomMouseSolver extends BaseSolver{
         return false;
     }
 
+
+    /**
+     * Get number of neighbors
+     * @param c cell
+     * @return number of neighbors
+     */
     public int getNumNeighbors(Cell c){
         int count = 0;
         if(c.getRight() != null && !c.getRight().isVisited()) count++;
