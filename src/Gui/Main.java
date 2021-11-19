@@ -78,7 +78,7 @@ public class Main extends Application {
         cb.getItems().add("Random Mouse Solver");
         cb.getItems().add("Wall Solver");
         cb.getItems().add("Lightning Solver");
-        cb.getItems().add("Additional Solver");
+        cb.getItems().add("Tremaux Solver");
         cb.setOnAction(e -> {
             int selectedIndex = cb.getSelectionModel().getSelectedIndex();
             if (selectedIndex == 0) {
@@ -89,6 +89,8 @@ public class Main extends Application {
                 solver = new WallSolver();
             } else if (selectedIndex == 3) {
                 solver = new LightningSolver();
+            } else  if (selectedIndex == 4) {
+                solver = new TremauxSolver();
             }
         });
         cb.getSelectionModel().selectFirst();
