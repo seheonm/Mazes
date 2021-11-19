@@ -15,11 +15,6 @@ public class LightningSolver extends BaseSolver{
 
         end.setVisited(true);
         solveBFS(end.getBottom());
-
-        Platform.runLater(() -> {
-            clearAllButSolved.run();
-            reRender.run();
-        });
     }
 
 
@@ -77,10 +72,25 @@ public class LightningSolver extends BaseSolver{
                 break;
             }
         }
+
+        Platform.runLater(() -> {
+            clearAllButSolved.run();
+        });
+
         // loop from end to begin
         Cell curr = end;
         while (true) {
             curr.setSolutionPath(true);
+            curr.setVisited(true);
+            try {
+                Thread.sleep(100);
+                Platform.runLater(() -> {
+                    reRender.run();
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             // draw water here
             if (curr == begin) break;
             curr = curr.getPrevious();
