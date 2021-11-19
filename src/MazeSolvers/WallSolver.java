@@ -11,8 +11,16 @@ public class WallSolver extends BaseSolver implements Runnable{
     String current_dir;
     HashMap<String, List<String>> Directions;
     Cell cell;
-    Cell cell2;
     long threadNorthID, threadSouthID;
+    private int numThreads = 1;
+
+
+//    /**
+//     * @param numThreads number of threads will be run
+//     */
+//    public WallSolver(int numThreads){
+//        this.numThreads = numThreads;
+//    }
 
 
     @Override
@@ -30,32 +38,8 @@ public class WallSolver extends BaseSolver implements Runnable{
         Directions.put("SOUTH", list3);
         Directions.put("EAST", list4);
 
-        ArrayList<WallSolver> solvers = new ArrayList<>(); // index 0 is up thread, index 1 is down thread
-        // array of wall solvers
-        // whichever finds water first kills the other thread
-        // follow water to opening
 
-        /*
-        scenario.elves = new ArrayList<>();
-		for(int i = 0; i != 10; i++) {
-			Elf elf = new Elf(i+1, scenario);
-			scenario.elves.add(elf);
-			th = new Thread(elf);
-			th.start();
-		}
-
-		for (Elf elf : scenario.elves) {
-					elf.kill();
-		}
-		// in Elf class
-	    public void kill() {
-		    this.alive = false;
-	    }
-         */
-
-        System.out.println("cell = " + end.getBottom().row + "," + end.getBottom().col);
         new Thread(() -> { // Going down
-            System.out.println("thread up ID = " + Thread.currentThread().getId());
             threadSouthID = Thread.currentThread().getId()%2;
             current_dir = "SOUTH";
             end.setVisited(true);
@@ -68,67 +52,65 @@ public class WallSolver extends BaseSolver implements Runnable{
         }).start();
 
 
-        new Thread(() -> { // Going up
-            System.out.println("thread down ID = " + Thread.currentThread().getId());
-            threadNorthID = Thread.currentThread().getId()%2;
-            current_dir = "NORTH";
-            start.setVisited(true);
-            solveRecursive(start.getTop(), current_dir);
-            Platform.runLater(() -> {
-                clearAllButSolved.run();
-                reRender.run();
-            });
-        }).start();
+        if(numThreads == 2) {
+            new Thread(() -> { // Going up
+                threadNorthID = Thread.currentThread().getId() % 2;
+                current_dir = "NORTH";
+                start.setVisited(true);
+                solveRecursive(start.getTop(), current_dir);
+                Platform.runLater(() -> {
+                    clearAllButSolved.run();
+                    reRender.run();
+                });
+            }).start();
+        }
     }
 
     HashSet<Cell> list1= new HashSet<>();
     HashSet<Cell> list2= new HashSet<>();
 
+    /**
+     * Solve using DFS-based algorithm
+     * @param c current cell
+     * @param current_dir current direction
+     * @return
+     */
     private boolean solveRecursive(Cell c, String current_dir){
 
-        if(!Collections.disjoint(list1, list2)) {
-            cell = c;
-            if(Thread.currentThread().getId() %2 == threadNorthID) {
-                int x = 0;
-                while (x < 5) {
-                    cell = cell.getPrevious();
-                    System.out.println("CELL = " + cell.row + "," + cell.col);
-                    cell.setSolutionPath(true);
-                    if (cell == end.getBottom()) {
-                        System.out.println("got to the end");
-                        break;
+        if(numThreads == 2) {
+            if (!Collections.disjoint(list1, list2)) {
+                cell = c;
+                if (Thread.currentThread().getId() % 2 == threadNorthID) {
+                    int x = 0;
+                    while (x < 5) {
+                        cell = cell.getPrevious();
+                        cell.setSolutionPath(true);
+                        if (cell == end.getBottom()) {
+                            break;
+                        }
+                        x++;
                     }
-                    x++;
-                }
-            }else{
-                int y = 0;
-                while (y < 5) {
-                    cell = cell.getPrevious();
-                    System.out.println("CELL = " + cell.row + "," + cell.col);
-                    cell.setSolutionPath(true);
-                    if (cell == start.getTop()) {
-                        System.out.println("got to the end");
-                        break;
+                } else {
+                    int y = 0;
+                    while (y < 5) {
+                        cell = cell.getPrevious();
+                        cell.setSolutionPath(true);
+                        if (cell == start.getTop()) {
+                            break;
+                        }
+                        y++;
                     }
-                    y++;
                 }
+                return true;
             }
-            return true;
-        }
 
 
-        if(Thread.currentThread().getId() %2 == threadNorthID) {
-            list2.add(c); // if north =>list2
+            if (Thread.currentThread().getId() % 2 == threadNorthID) {
+                list2.add(c); // if north =>list2
+            } else {
+                list1.add(c);
+            }
         }
-        else{
-            list1.add(c);
-        }
-//        if(Thread.currentThread().getId() %2 == 0){
-//            list1.add(c);
-//        }else{
-//            list2.add(c);
-//        }
-
 
 
 
@@ -137,7 +119,7 @@ public class WallSolver extends BaseSolver implements Runnable{
             return false;
         }
         try {
-            Thread.sleep(100);
+            Thread.sleep(waitTime);
             Platform.runLater(() -> {
                 reRender.run();
             });
@@ -152,9 +134,9 @@ public class WallSolver extends BaseSolver implements Runnable{
 
 
         for (String d : Directions.get(current_dir)) {
-
             Cell cell = c.Direct_Call.get((d));
-            if (cell == null) { // if there's a wall then go to the next direction
+            // if there's a wall then go to the next direction
+            if (cell == null) {
                 continue;
             }
             cell.setPrevious(c);
