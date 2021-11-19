@@ -12,20 +12,21 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+//import java.awt.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Main extends Application {
-    private MazeGenerator generator = new DepthFirstGenerator();
-    private MazeSolver solver = new BasicSolver();
+    private MazeGenerator generator;// = new DepthFirstGenerator();
+    private MazeSolver solver;// = new BasicSolver();
     private Maze m;
     private int[][] paths;
 
@@ -33,28 +34,96 @@ public class Main extends Application {
     private static int boardSize;
 
     public static void main(String[] args){
-        if(args.length != 2){
-            System.out.println("Wrong args.");
-            System.out.println("first arg: tileSize");
-            System.out.println(("second arg: boardSize"));
-            Application.launch(args);
-            return;
-        }
-        int ts = Integer.parseInt(args[0]);
-        int bs = Integer.parseInt(args[1]);
-        tileSize = ts;
-        boardSize = bs;
+//        if(args.length != 2){
+//            System.out.println("Wrong args.");
+//            System.out.println("first arg: tileSize");
+//            System.out.println(("second arg: boardSize"));
+//            Application.launch(args);
+//            return;
+//        }
+//        int ts = Integer.parseInt(args[0]);
+//        int bs = Integer.parseInt(args[1]);
+//        tileSize = ts;
+//        boardSize = bs;
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        if(tileSize == 0 || boardSize == 0){
-            Platform.exit();
-            System.exit(0);
+//        if(tileSize == 0 || boardSize == 0){
+//            Platform.exit();
+//            System.exit(0);
+//
+//        }
+//        VBox startPane = new VBox();
+        BorderPane borderPane = new BorderPane();
+//        Scene scene = new Scene(borderPane);
+        Label windowSizeLabel = new Label();
+        Label cellSizeLabel = new Label();
+        Label generatorLabel = new Label();
+        Label solverLabel = new Label();
 
-        }
-        paths = new int[boardSize / tileSize][boardSize / tileSize];
+        Button button = new Button("Play");
+        button.setVisible(false);
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose config file");
+        Button fileBtn = new Button("Choose file");
+//        fileBtn.setPrefWidth(150);
+        fileBtn.setOnAction(e -> {
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if(selectedFile != null){
+                button.setVisible(true);
+                fileBtn.setVisible(false);
+            }
+            System.out.println(selectedFile.getPath());
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+
+                String windowSize = reader.readLine();
+                String cellSize = reader.readLine();
+                String gen = reader.readLine();
+                String s = reader.readLine();
+
+                windowSizeLabel.setText("WindowSize:" + windowSize);
+                cellSizeLabel.setText("CellSize: " + cellSize);
+                generatorLabel.setText("Generator: " + gen);
+                solverLabel.setText("Solver: " + s);
+
+                boardSize = Integer.parseInt(windowSize);
+                tileSize = Integer.parseInt(cellSize);
+
+                if (gen.equals("dfs")) {
+                    generator = new DepthFirstGenerator();
+                } else if (gen.equals("kruskal")) {
+                    generator = new KruskalGenerator();
+                } else if (gen.equals("prim")) {
+                    generator = new PrimsGenerator();
+                }
+                if (s.equals("mouse thread")) {
+                    solver = new RandomMouseSolver();
+                } else if (s.equals("wall")) {
+                    solver = new WallSolver();
+                } else if (s.equals("lightning")) {
+                    solver = new LightningSolver();
+                } else  if (s.equals("tremaux")) {
+                    solver = new TremauxSolver();
+                }
+
+                if(generator == null || solver == null){
+                    throw new Exception("Could not parse solver or generator from '" + selectedFile.getPath() + "'.");
+                }
+//                stage.setScene();
+                stage.setWidth(boardSize);
+                stage.setHeight(boardSize + (tileSize * 2) + 50);
+                paths = new int[boardSize / tileSize][boardSize / tileSize];
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+//        startPane.getChildren().add(fileBtn);
         ComboBox comboBox = new ComboBox();
         comboBox.setPromptText("Maze Generators");
         comboBox.getItems().add("Depth First Generator");
@@ -99,13 +168,15 @@ public class Main extends Application {
         stage.setTitle("Maze");
 
         HBox hBox = new HBox();
-        BorderPane borderPane = new BorderPane();
+        hBox.setSpacing(20);
+
         //Pipes need to be transparent before changing the background
         borderPane.setTop(hBox);
         borderPane.setCenter(pane);
 
-        Button button = new Button("Play");
-        hBox.getChildren().addAll(button, comboBox, cb);
+//        hBox.getChildren().addAll(button, comboBox, cb, fileBtn);
+        hBox.getChildren().addAll(fileBtn, windowSizeLabel, cellSizeLabel, generatorLabel, solverLabel, button);
+
         button.setOnMouseClicked(event -> {
             Maze m = new Maze(boardSize / tileSize, generator, solver);
 
@@ -124,7 +195,7 @@ public class Main extends Application {
             comboBox.setVisible(false);
             cb.setVisible(false);
         });
-        stage.setScene(new Scene(borderPane, boardSize, boardSize + tileSize * 2 + 50));
+        stage.setScene(new Scene(borderPane, 300, 100));//, boardSize, boardSize + tileSize * 2 + 50));
 
         stage.show();
     }
